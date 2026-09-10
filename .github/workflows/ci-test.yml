@@ -85,11 +85,8 @@ jobs:
           curl -k -X POST \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             -F "name=@build/${{ github.event.repository.name }}.spl" \
-            -F "label=EDESM Project Management" \
-            -F "version=1.0.0" \
-            -F "visible=true" \
-            -F "update=true" \
             -F "filename=true" \
+            -F "update=true" \
             "${SPLUNK_BASE_URL}/services/apps/local"
 
 
