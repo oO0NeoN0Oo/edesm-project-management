@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "Checking required Splunk app files..."
           test -f default/app.conf || (echo "Missing default/app.conf" && exit 1)
-          test -f metadata/default.meta || (echo "Missing metadata/default.meta" && exit 1)
+          test -f metadata/local.meta || (echo "Missing metadata/local.meta" && exit 1)
 
   deploy-app:
     needs: validate-app
@@ -91,5 +91,28 @@ jobs:
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/admin/apps/local/${GITHUB_REPOSITORY##*/}/reload"
 
-        
+  package-app:
+    needs: deploy-app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build SPL package
+        run: |
+          echo "Building SPL package..."
+          mkdir build
+          tar -cvzf build/${GITHUB_REPOSITORY##*/}.spl .
+
+      - name: Upload SPL artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${GITHUB_REPOSITORY##*/}.spl
+          path: build/${GITHUB_REPOSITORY##*/}.spl
+
+
+
+
+
 
