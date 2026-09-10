@@ -112,6 +112,11 @@ jobs:
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/admin/apps/local/${GITHUB_REPOSITORY##*/}/reload"
 
+      - name: Verify SPL file exists
+        run: |
+          echo "Checking build directory..."
+          ls -lh build
+
       - name: Install SPL package into Splunk
         run: |
           echo "Installing SPL package..."
