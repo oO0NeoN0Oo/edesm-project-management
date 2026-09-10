@@ -84,10 +84,9 @@ jobs:
           echo "Installing SPL package..."
           curl -k -X POST \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-            -F "name=@build/${{ github.event.repository.name }}.spl" \
-            -F "filename=true" \
-            -F "update=true" \
-            "${SPLUNK_BASE_URL}/services/apps/local"
+            --data-binary "@build/${{ github.event.repository.name }}.spl" \
+            "${SPLUNK_BASE_URL}/services/apps/local?filename=true&update=true"
+
 
 
 
