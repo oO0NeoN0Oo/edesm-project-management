@@ -34,3 +34,62 @@ jobs:
           echo "Checking required Splunk app files..."
           test -f default/app.conf || (echo "Missing default/app.conf" && exit 1)
           test -f metadata/default.meta || (echo "Missing metadata/default.meta" && exit 1)
+
+  deploy-app:
+    needs: validate-app
+    runs-on: ubuntu-latest
+
+    env:
+      SPLUNK_BASE_URL: ${{ secrets.SPLUNK_BASE_URL }}
+      SPLUNK_TOKEN: ${{ secrets.SPLUNK_TOKEN }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy XML dashboards
+        run: |
+          echo "Deploying XML dashboards..."
+          for file in $(find . -type f -name "*.xml"); do
+            base=$(basename "$file" .xml)
+            echo "Uploading $base"
+            curl -k -X POST \
+              -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+              --data-urlencode "name=$base" \
+              --data-urlencode "eai:data=$(cat $file)" \
+              "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/data/ui/views"
+          done
+
+      - name: Deploy HTML dashboards
+        run: |
+          echo "Deploying HTML dashboards..."
+          for file in $(find . -type f -name "*.html"); do
+            base=$(basename "$file" .html)
+            echo "Uploading $base"
+            curl -k -X POST \
+              -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+              --data-urlencode "name=$base" \
+              --data-urlencode "eai:data=$(cat $file)" \
+              "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/data/ui/views"
+          done
+
+      - name: Deploy navigation
+        run: |
+          if [ -f default/data/ui/nav/default.xml ]; then
+            echo "Deploying navigation..."
+            curl -k -X POST \
+              -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+              --data-urlencode "name=default" \
+              --data-urlencode "eai:data=$(cat default/data/ui/nav/default.xml)" \
+              "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/data/ui/nav"
+          fi
+
+      - name: Reload app (zero downtime)
+        run: |
+          echo "Reloading app..."
+          curl -k -X POST \
+            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+            "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/admin/apps/local/${GITHUB_REPOSITORY##*/}/reload"
+
+        
+
