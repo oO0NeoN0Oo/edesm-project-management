@@ -47,14 +47,14 @@ jobs:
         run: |
           echo "Building SPL package..."
           mkdir -p build
-          tar -cvzf build/${GITHUB_REPOSITORY##*/}.spl .
+          tar -cvzf build/${{ github.event.repository.name }}.spl .
           ls -lh build
 
       - name: Upload SPL artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${GITHUB_REPOSITORY##*/}.spl
-          path: build/${GITHUB_REPOSITORY##*/}.spl
+          name: ${{ github.event.repository.name }}.spl
+          path: build/${{ github.event.repository.name }}.spl
 
   deploy-app:
     needs: package-app
