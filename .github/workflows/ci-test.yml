@@ -74,50 +74,6 @@ jobs:
           name: ${{ github.event.repository.name }}.spl
           path: build
 
-      - name: Deploy XML dashboards
-        run: |
-          echo "Deploying XML dashboards..."
-          for file in $(find . -type f -name "*.xml"); do
-            base=$(basename "$file" .xml)
-            echo "Uploading $base"
-            curl -k -X POST \
-              -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-              --data-urlencode "name=$base" \
-              --data-urlencode "eai:data=$(cat $file)" \
-              "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/data/ui/views"
-          done
-
-      - name: Deploy HTML dashboards
-        run: |
-          echo "Deploying HTML dashboards..."
-          for file in $(find . -type f -name "*.html"); do
-            base=$(basename "$file" .html)
-            echo "Uploading $base"
-            curl -k -X POST \
-              -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-              --data-urlencode "name=$base" \
-              --data-urlencode "eai:data=$(cat $file)" \
-              "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/data/ui/views"
-          done
-
-      - name: Deploy navigation
-        run: |
-          if [ -f default/data/ui/nav/default.xml ]; then
-            echo "Deploying navigation..."
-            curl -k -X POST \
-              -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-              --data-urlencode "name=default" \
-              --data-urlencode "eai:data=$(cat default/data/ui/nav/default.xml)" \
-              "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/data/ui/nav"
-          fi
-
-      - name: Reload app (zero downtime)
-        run: |
-          echo "Reloading app..."
-          curl -k -X POST \
-            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-            "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/admin/apps/local/${GITHUB_REPOSITORY##*/}/reload"
-
       - name: Verify SPL file exists
         run: |
           echo "Checking build directory..."
