@@ -1,0 +1,24 @@
+name: Splunk CI Test
+
+on:
+  workflow_dispatch:        # allows manual runs
+  push:
+    branches: [ "main" ]    # optional automatic trigger
+
+jobs:
+  test-splunk-connection:
+    runs-on: ubuntu-latest
+
+    env:
+      SPLUNK_BASE_URL: ${{ secrets.SPLUNK_BASE_URL }}
+      SPLUNK_TOKEN: ${{ secrets.SPLUNK_TOKEN }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Test Splunk REST connection
+        run: |
+          echo "Testing Splunk connection..."
+          curl -k -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+               "${SPLUNK_BASE_URL}/services/server/info"
