@@ -68,6 +68,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Download SPL artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}.spl
+          path: build
+
       - name: Deploy XML dashboards
         run: |
           echo "Deploying XML dashboards..."
