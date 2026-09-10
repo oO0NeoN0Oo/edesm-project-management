@@ -33,4 +33,4 @@ jobs:
         run: |
           echo "Checking required Splunk app files..."
           test -f default/app.conf || (echo "Missing default/app.conf" && exit 1)
-          test -f metadata/local.meta || (echo "Missing metadata/local.meta" && exit 1)
+          test -f metadata/default.meta || (echo "Missing metadata/default.meta" && exit 1)
