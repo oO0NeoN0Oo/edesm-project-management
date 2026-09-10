@@ -91,6 +91,16 @@ jobs:
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             "${SPLUNK_BASE_URL}/servicesNS/nobody/${GITHUB_REPOSITORY##*/}/admin/apps/local/${GITHUB_REPOSITORY##*/}/reload"
 
+      - name: Install SPL package into Splunk
+        run: |
+          echo "Installing SPL package..."
+          curl -k -X POST \
+            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+            -F "name=${GITHUB_REPOSITORY##*/}" \
+            -F "update=true" \
+            -F "filename=@build/${GITHUB_REPOSITORY##*/}.spl" \
+            "${SPLUNK_BASE_URL}/services/apps/local"
+
   package-app:
     needs: deploy-app
     runs-on: ubuntu-latest
