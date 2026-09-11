@@ -92,8 +92,9 @@ jobs:
           echo "Installing SPL package..."
           curl -k -X POST \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-            -F "name=@build/${{ github.event.repository.name }}.spl" \
-            -F "filename=true" \
+            -d "name=EDESM Project Management"
+            -d "filename=@build/${{ github.event.repository.name }}.spl" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
             "${SPLUNK_BASE_URL}/services/apps/local"
 
 
