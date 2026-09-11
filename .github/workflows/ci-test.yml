@@ -79,6 +79,19 @@ jobs:
           echo "Checking build directory..."
           ls -lh build
 
+      #testing splunk connectivity
+      - name: Test Splunk connectivity
+        run: |
+          curl -v https://splunk.neonitservices.co.uk/services/server/info
+      
+      - name: DNS check
+        run: nslookup splunk.neonitservices.co.uk
+
+      - name: Check token presence
+        run: | 
+          echo "Token length: ${#SPLUNK_TOKEN}"
+
+
       - name: Install SPL package into Splunk
         run: |
           echo "Installing SPL package..."
