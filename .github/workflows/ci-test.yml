@@ -88,7 +88,7 @@ jobs:
         run: |
           echo "Installing SPL package..."
           curl -k -X POST \
-          -H "Authorization: Bearer $SPLUNK_TOKEN" \
+          -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
           -H "Content-Type: application/octet-stream" \
           -H "Expect:" \
           --data-binary "@build/${{ github.event.repository.name }}.spl" \
