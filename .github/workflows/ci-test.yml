@@ -82,7 +82,7 @@ jobs:
       #testing splunk connectivity
       - name: Test Splunk connectivity
         run: |
-          curl -v \
+          echo "Confirming Splunk connection including token..."          curl -v \
           -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
           ${SPLUNK_BASE_URL}/services/server/info
 
@@ -90,17 +90,11 @@ jobs:
         run: |
           echo "Installing SPL package..."
           curl -k -X POST \
-          -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-          -H "Content-Type: application/octet-stream" \
-          -H "Expect:" \
-          --data-binary "@build/${{ github.event.repository.name }}.spl" \
-          ${SPLUNK_BASE_URL}/services/apps/local?filename=true&update=true
+            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+            -F "name=@build/${{ github.event.repository.name }}.spl" \
+            -F "filename=true" \
+            "${SPLUNK_BASE_URL}/services/apps/local"
 
-#          curl -k -X POST \
-#            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-#            -F "name=@build/${{ github.event.repository.name }}.spl" \
-#            -F "filename=true" \
-#            "${SPLUNK_BASE_URL}/services/apps/local"
 
 
 
