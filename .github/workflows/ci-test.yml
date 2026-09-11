@@ -82,7 +82,7 @@ jobs:
       #testing splunk connectivity
       - name: Test Splunk connectivity
         run: |
-          curl -v 
+          curl -v \
           -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
           ${SPLUNK_BASE_URL}/services/server/info
 
