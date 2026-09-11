@@ -47,7 +47,9 @@ jobs:
         run: |
           echo "Building SPL package..."
           mkdir -p build
-          tar -cvzf build/${{ github.event.repository.name }}.spl
+          mkdir -p ${{ github.event.repository.name }}
+          cp -r bin default local metadata static appserver ${{ github.event.repository.name}}/
+          tar -cvzf build/${{ github.event.repository.name }}.spl ${{ github.event.repository.name}}/
           ls -lh build
 
       - name: Upload SPL artifact
@@ -91,12 +93,11 @@ jobs:
         run: |
           echo "Installing SPL package..."
           curl -v -k \
-            "${SPLUNK_BASE_URL}/services/apps/local" \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+            "${SPLUNK_BASE_URL}/services/apps/local" \
             --data-urlencode "name=@build/${{ github.event.repository.name }}.spl" \
             --data-urlencode "filename=true" \
             --data-urlencode "update=true" \
-            --data-urlencode "output_mode=json"
 
 
 
