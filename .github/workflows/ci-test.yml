@@ -90,12 +90,13 @@ jobs:
       - name: Install SPL package into Splunk
         run: |
           echo "Installing SPL package..."
-          curl -k -X POST \
+          curl -v -k -X POST \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-            -d "name=EDESM Project Management" \
-            -d "filename=@build/${{ github.event.repository.name }}.spl" \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            "${SPLUNK_BASE_URL}/services/apps/local"
+            -H "Content-Type: application/octet-stream" \
+            -H "Expect:" \
+            --data-binary "@build/${{ github.event.repository.name }}.spl" \
+            "${SPLUNK_BASE_URL}/services/apps/local?name=@build/${{ github.event.repository.name }}.spl&filename=true&update=true"
+
 
 
 
