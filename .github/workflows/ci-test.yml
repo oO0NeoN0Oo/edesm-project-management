@@ -47,11 +47,8 @@ jobs:
         run: |
           echo "Building SPL package..."
           mkdir -p build
-          mkdir -p ${{ github.event.repository.name }}
-          cp -r bin default local metadata static appserver ${{ github.event.repository.name}}/
-          tar -cvzf build/${{ github.event.repository.name }}.spl ${{ github.event.repository.name}}/
+          tar -cvzf build/${{ github.event.repository.name }}.spl ${{ github.event.repository.name }}/
           ls -lh build
-
 
       - name: Upload SPL artifact
         uses: actions/upload-artifact@v4
