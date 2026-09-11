@@ -82,9 +82,10 @@ jobs:
       #testing splunk connectivity
       - name: Test Splunk connectivity
         run: |
-          echo "Confirming Splunk connection including token..."          curl -v \
-          -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-          ${SPLUNK_BASE_URL}/services/server/info
+          echo "Confirming Splunk connection including token..." \
+          curl -v \
+            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+            ${SPLUNK_BASE_URL}/services/server/info
 
       - name: Install SPL package into Splunk
         run: |
