@@ -47,6 +47,7 @@ jobs:
         run: |
           echo "Building SPL package..."
           mkdir -p build
+          mkdir -p build/${{ github.event.repository.name }}
           tar -cvzf build/${{ github.event.repository.name }}.spl ${{ github.event.repository.name }}/
           ls -lh build
 
