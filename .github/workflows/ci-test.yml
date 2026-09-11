@@ -82,24 +82,23 @@ jobs:
       #testing splunk connectivity
       - name: Test Splunk connectivity
         run: |
-          curl -v https://splunk.neonitservices.co.uk/services/server/info
-      
-      - name: DNS check
-        run: nslookup splunk.neonitservices.co.uk
-
-      - name: Check token presence
-        run: | 
-          echo "Token length: ${#SPLUNK_TOKEN}"
-
+          curl -v ${SPLUNK_BASE_URL}/services/server/info
 
       - name: Install SPL package into Splunk
         run: |
           echo "Installing SPL package..."
           curl -k -X POST \
-            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
-            -F "name=@build/${{ github.event.repository.name }}.spl" \
-            -F "filename=true" \
-            "${SPLUNK_BASE_URL}/services/apps/local"
+          -H "Authorization: Bearer $SPLUNK_TOKEN" \
+          -H "Content-Type: application/octet-stream" \
+          -H "Expect:" \
+          --data-binary "@build/${{ github.event.repository.name }}.spl" \
+          ${SPLUNK_BASE_URL}/services/apps/local?filename=true&update=true
+
+#          curl -k -X POST \
+#            -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
+#            -F "name=@build/${{ github.event.repository.name }}.spl" \
+#            -F "filename=true" \
+#            "${SPLUNK_BASE_URL}/services/apps/local"
 
 
 
