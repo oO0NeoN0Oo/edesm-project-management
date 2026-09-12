@@ -96,7 +96,7 @@ jobs:
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             "${SPLUNK_BASE_URL}/services/apps/local" \
             --data-urlencode "name=deployment-demo" \
-            --data-urlencode "template="deployment-app"\
+            --data-urlencode "template=deployment-app" \
             --data-urlencode "label=Deployment Demo"
 #            --data-urlencode "name=@build/${{ github.event.repository.name }}.spl" \
 #            --data-urlencode "filename=true" \
