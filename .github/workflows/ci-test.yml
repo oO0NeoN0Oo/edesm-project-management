@@ -95,13 +95,10 @@ jobs:
           curl -v -k \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             "${SPLUNK_BASE_URL}/services/apps/local" \
-            --data-urlencode"name=restDemo"
+            --data-urlencode "name=restDemo"
 #            --data-urlencode "name=@build/${{ github.event.repository.name }}.spl" \
 #            --data-urlencode "filename=true" \
 #            --data-urlencode "update=true" \
-
-
-
 
 
 
