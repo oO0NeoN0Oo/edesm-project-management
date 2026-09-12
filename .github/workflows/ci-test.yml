@@ -95,9 +95,9 @@ jobs:
           curl -v -k \
             -H "Authorization: Bearer ${SPLUNK_TOKEN}" \
             "${SPLUNK_BASE_URL}/services/apps/local" \
-            --data-urlencode "name=deployment-demo" \
-            --data-urlencode "template=deployment_app" \
-            --data-urlencode "label=Deployment Demo"
+            --data-urlencode "name=test-demo" \
+            --data-urlencode "template=test_app" \
+            --data-urlencode "label=TEST Demo"
 #            --data-urlencode "name=@build/${{ github.event.repository.name }}.spl" \
 #            --data-urlencode "filename=true" \
 #            --data-urlencode "update=true" \
